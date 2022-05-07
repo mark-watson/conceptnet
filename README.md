@@ -1,4 +1,4 @@
-# Simple portable SPARQL clients: see book "Loving Common Lisp, or the Savvy Programmer's Secret Weapon"
+# ConceptNet client: see book "Loving Common Lisp, or the Savvy Programmer's Secret Weapon"
 
 Book URI: https://leanpub.com/lovinglisp
 
