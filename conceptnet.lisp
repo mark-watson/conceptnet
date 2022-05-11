@@ -3,7 +3,12 @@
 
 (in-package #:conceptnet)
 
+(defun hash-keys-and-values (hash-table)
+  (loop for key being the hash-keys of hash-table collect (list key (gethash key hash-table))))
+
+
 (defun conceptnet (query)
+  (print query)
   (let* ((response
          (myutils:replace-all
           (myutils:replace-all
@@ -11,26 +16,18 @@
             (list
              "curl" 
              (concatenate 'string
-                          "https://api.conceptnet.io/c/en/example"
-                          ;;(drakma:url-encode query :utf-8)
-                          ;;"&format=json"
-			  ))
+                          "https://api.conceptnet.io/c/en/"
+			  query))
             :output :string)
            "\\u2013" " ")
           "\\u" " "))
-	(jld-hash (cl-json-ld:jsd-read response)))
-    (pprint jld-hash )
-    (loop for key being the hash-keys of jld-hash
-        do (print (list key ":" (gethash key jld-hash))))
-    (with-input-from-string (s response)
-      (pprint s)
-      (let ((json-as-list (cl-json-ld:jsd-read s)))
-        (pprint json-as-list)  ; uncomment this to see how following expression works:
-        (mapcar #'(lambda (x)
-                    (mapcar #'(lambda (y)
-                                (list (car y) (cdaddr y))) x))  (cdr (cadadr json-as-list)))))))
+	 (results
+	  (with-input-from-string
+	      (s response)
+	    (json:decode-json s))))
+  results))
 
 #|
-(setf dd (conceptnet:conceptnet "Arizona"))
+(setf dd (conceptnet:conceptnet "arizona"))
 (pprint dd)
 |#
