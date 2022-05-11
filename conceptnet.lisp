@@ -15,17 +15,13 @@
 (defun conceptnet (query)
   (print query)
   (let* ((response
-          (myutils:replace-all
-           (myutils:replace-all
-            (uiop:run-program 
-             (list
-              "curl" 
-              (concatenate 'string
-                           "https://api.conceptnet.io/c/en/"
-                           query))
-             :output :string)
-            "\\u2013" " ")
-           "\\u" " "))
+          (uiop:run-program 
+           (list
+            "curl" 
+            (concatenate 'string
+                         "https://api.conceptnet.io/c/en/"
+                         query))
+           :output :string))
 	 (results
 	  (with-input-from-string
 	      (s response)
