@@ -6,28 +6,31 @@
 (defun hash-keys-and-values (hash-table)
   (loop for key being the hash-keys of hash-table collect (list key (gethash key hash-table))))
 
+(defun get-surface-text (an-edge)
+  (dolist (e an-edge)
+    (if (equal (car e) :surface-text)
+	(return-from get-surface-text (cdr e))))
+  nil)
 
 (defun conceptnet (query)
   (print query)
   (let* ((response
-         (myutils:replace-all
           (myutils:replace-all
-           (uiop:run-program 
-            (list
-             "curl" 
-             (concatenate 'string
-                          "https://api.conceptnet.io/c/en/"
-			  query))
-            :output :string)
-           "\\u2013" " ")
-          "\\u" " "))
+           (myutils:replace-all
+            (uiop:run-program 
+             (list
+              "curl" 
+              (concatenate 'string
+                           "https://api.conceptnet.io/c/en/"
+                           query))
+             :output :string)
+            "\\u2013" " ")
+           "\\u" " "))
 	 (results
 	  (with-input-from-string
 	      (s response)
 	    (json:decode-json s))))
-    ;;results
-    (loop for x in (assoc :edges results) when (assoc "end" x) collect x)))
-    ;;(loop for x in (assoc :edges results) when (evenp x) collect x)
+    (remove nil (mapcar #'get-surface-text (cdr (assoc :edges results))))))
     
 
 #|
