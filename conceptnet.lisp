@@ -1,5 +1,7 @@
-(in-package #:conceptnet)
+;; Compyright 2021-2022 Mark Watson All Rights Reserved.
+;; License: Apache 2
 
+(in-package #:conceptnet)
 
 (defun conceptnet (query)
   (let* ((response
