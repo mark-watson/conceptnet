@@ -25,9 +25,13 @@
 	  (with-input-from-string
 	      (s response)
 	    (json:decode-json s))))
-  results))
+    ;;results
+    (loop for x in (assoc :edges results) when (assoc "end" x) collect x)))
+    ;;(loop for x in (assoc :edges results) when (evenp x) collect x)
+    
 
 #|
 (setf dd (conceptnet:conceptnet "arizona"))
 (pprint dd)
+(conceptnet:conceptnet "prescott")
 |#
